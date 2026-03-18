@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Conversor</title>
+</head>
+
+<body>
+
+<h1>Conversor</h1>
+
+<input type="number" id="reais" placeholder="Digite em R$">
+<button onclick="converter()">Converter</button>
+
+<div id="resultado"></div>
+<pre id="historico"></pre>
+
+<script>
+let cotacao = 5; // valor exemplo
+let historico = [];
+
+function converter() {
+  let reais = parseFloat(document.getElementById("reais").value);
+
+  if (!reais) return;
+
+  let dolares = reais / cotacao;
+
+  let resultado = "US$ " + dolares.toFixed(2);
+
+  historico.push(resultado);
+
+  document.getElementById("resultado").innerText = resultado;
+
+  document.getElementById("historico").innerText =
+    historico.join("\n");
+}
+</script>
+
+</body>
+</html>
