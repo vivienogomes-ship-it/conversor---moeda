@@ -2,22 +2,87 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Conversor</title>
+<title>Conversor PRO</title>
+
+<style>
+  body {
+    font-family: Arial;
+    background: linear-gradient(135deg, #0f2027, #2c5364);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
+  .card {
+    background: #1e1e1e;
+    padding: 30px;
+    border-radius: 20px;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 15px;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    background: #00ff88;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #00cc6a;
+  }
+
+  .resultado {
+    margin-top: 20px;
+    font-size: 22px;
+  }
+
+  .cotacao {
+    font-size: 14px;
+    color: #aaa;
+  }
+</style>
 </head>
 
 <body>
 
-<h1>Conversor</h1>
+<div class="card">
+  <h1>💰 Conversor</h1>
 
-<input type="number" id="reais" placeholder="Digite em R$">
-<button onclick="converter()">Converter</button>
+  <input type="number" id="reais" placeholder="Digite em R$">
+  <button onclick="converter()">Converter</button>
 
-<div id="resultado"></div>
-<pre id="historico"></pre>
+  <div class="cotacao" id="cotacao">Carregando...</div>
+  <div class="resultado" id="resultado"></div>
+</div>
 
 <script>
-let cotacao = 5; // valor exemplo
-let historico = [];
+let cotacao = 0;
+
+async function pegarCotacao() {
+  let res = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL");
+  let dados = await res.json();
+
+  cotacao = parseFloat(dados.USDBRL.bid);
+
+  document.getElementById("cotacao").innerText =
+    "💵 Dólar: R$ " + cotacao.toFixed(2);
+}
 
 function converter() {
   let reais = parseFloat(document.getElementById("reais").value);
@@ -26,15 +91,11 @@ function converter() {
 
   let dolares = reais / cotacao;
 
-  let resultado = "US$ " + dolares.toFixed(2);
-
-  historico.push(resultado);
-
-  document.getElementById("resultado").innerText = resultado;
-
-  document.getElementById("historico").innerText =
-    historico.join("\n");
+  document.getElementById("resultado").innerText =
+    "US$ " + dolares.toFixed(2);
 }
+
+pegarCotacao();
 </script>
 
 </body>
